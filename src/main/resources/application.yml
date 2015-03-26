@@ -1,0 +1,15 @@
+spring:
+  redis:
+    host: localhost # server host
+    password: # server password
+    port: 6379 # connection port
+vaadin:
+  servlet:
+    urlMapping: /cv/*
+    params:
+      productionMode: false
+# Servlet init params for StaticContentServlet
+    static:
+        servlet:
+            params: 
+                widgetset: com.cutesystems.CV.CVWidgetSet
