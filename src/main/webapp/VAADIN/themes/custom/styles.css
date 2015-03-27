@@ -12402,7 +12402,13 @@ div.v-layout.v-horizontal.v-widget {
 	background-color: #c9a975;
 }
 
+.custom .normal {
+	color: #946a4e;
+	background-color: #ffffff;
+}
+
 .custom .footer {
+	width: 100%;
 	color: #c9a975;
 	background-color: #783632;
 }
@@ -12411,8 +12417,11 @@ div.v-layout.v-horizontal.v-widget {
 	width: 100%;
 	background-color: #946a4e;
 	color: #c9a975;
-	font-size: 33px;
+}
+
+.custom .header * {
 	text-align: center;
+	font-size: 33px;
 }
 
 .custom .about {

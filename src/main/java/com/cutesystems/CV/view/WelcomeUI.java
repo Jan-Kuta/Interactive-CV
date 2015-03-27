@@ -27,9 +27,9 @@ import com.vaadin.server.VaadinService;
 import com.vaadin.shared.Position;
 import com.vaadin.shared.ui.label.ContentMode;
 import com.vaadin.ui.Alignment;
+import com.vaadin.ui.CustomLayout;
 import com.vaadin.ui.Embedded;
 import com.vaadin.ui.FormLayout;
-import com.vaadin.ui.GridLayout;
 import com.vaadin.ui.HorizontalLayout;
 import com.vaadin.ui.Label;
 import com.vaadin.ui.Link;
@@ -58,33 +58,39 @@ public class WelcomeUI extends UI {
 		Person ja = this.personRepo.opsForValue().get("JanKuta");
 		PaperStack paper = new PaperStack();
 		paper.setPaperColor("#c9a975", "#946a4e");
-		paper.addComponent(new CVView(ja));
+		paper.addComponent(getCustom(ja), "#f0e5d1");
 		paper.addComponent(new About());
 
 		HorizontalLayout layout = new HorizontalLayout();
 		layout.addComponent(paper);
-		layout.setSizeFull();
+		layout.setWidth("100%");
+		layout.setHeight("950px");
+
 
 		layout.setComponentAlignment(paper, Alignment.TOP_CENTER);
 
-		paper.setSizeFull();
+		paper.setHeight("100%");
 		paper.setWidth("740px");
-		paper.setHeight("950px");
-
 		setContent(layout);
-		/*
-		 * CVView cv = new CVView(ja); VerticalLayout layout = new
-		 * VerticalLayout(); layout.addComponent(cv); layout.setWidth("100%");
-		 * 
-		 * layout.setComponentAlignment(cv, Alignment.TOP_CENTER);
-		 * 
-		 * cv.setWidth("740px"); //cv.setHeight("900px");
-		 * 
-		 * setContent(cv);
-		 */
+				
 		Notification notif = new Notification("Vítejte, doufám, že se vám můj interaktivní životopis líbí", "Nezapomeňte se podívat na další list.\nNajeďte myší na jednotlivé dovednosti, abyste se dozvěděli více podrobností.", Type.TRAY_NOTIFICATION);
 		notif.setPosition(Position.TOP_LEFT);
 		notif.show(getPage());
+	}
+	
+	public CustomLayout getCustom(Person person){
+		CustomLayout layout = new CustomLayout("myLayout");
+		
+		layout.addComponent(new Header(person), "header");
+		layout.addComponent(new Foto(person), "foto");
+		layout.addComponent(new AboutMeView(person), "about_me");
+		layout.addComponent(new SkillView(person.getSkillGroups()), "skills");
+		layout.addComponent(new EducationView(person.getEducation()), "education");
+		layout.addComponent(new WorkView(person.getWorkExpirience()), "work");
+		layout.addComponent(new OtherStuffView(person.getOtherStuff()), "other");
+		layout.addComponent(new Footer(), "footer");
+		layout.setHeight("100%");
+		return layout;
 	}
 
 }
@@ -116,7 +122,6 @@ class About extends MVerticalLayout {
 				+ "</ul>"
 				+ "<h3><strong>Co by se dalo zlep&scaron;it</strong></h3>"
 				+ "<ul>"
-				+ "	<li>Vyře&scaron;it, proč se v uživatlsk&eacute;m rozhran&iacute; při změně velikosti objevuj&iacute; b&iacute;l&eacute; č&aacute;ry</li>"
 				+ "	<li>Vytvořit administr&aacute;torsk&eacute; rozhran&iacute; pro editaci osoby</li>"
 				+ "	<li>Zabezpečit administr&aacute;torsk&eacute; rozhran&iacute; heslem (lze použ&iacute;t Spring security)</li>"
 				+ "	<li>Naimplementovat internacionalizaci</li>" + "</ul>");
@@ -127,50 +132,6 @@ class About extends MVerticalLayout {
 	}
 }
 
-class CVView extends GridLayout {
-
-	private static final long serialVersionUID = 12345678L;
-
-	public CVView(Person person) {
-		super(2, 6);
-
-		// setWidth("100%");
-		setSizeFull();
-		setColumnExpandRatio(0, 1);
-		setColumnExpandRatio(1, 2);
-
-		// FirstColumn
-		Header header = new Header(person);
-		this.addComponent(header, 0, 0);
-		setComponentAlignment(header, Alignment.MIDDLE_CENTER);
-
-		this.addComponent(new Foto(person), 0, 1);
-
-		this.addComponent(new AboutMeView(person), 0, 2);
-
-		this.addComponent(new SkillView(person.getSkillGroups()), 0, 3, 0, 4);
-
-		// Second column
-		this.addComponent(new EducationView(person.getEducation()), 1, 0, 1, 1);
-
-		this.addComponent(new WorkView(person.getWorkExpirience()), 1, 2, 1, 3);
-
-		this.addComponent(new OtherStuffView(person.getOtherStuff()), 1, 4);
-
-		// Footer
-		this.addComponent(new Footer(), 0, 5, 1, 5);
-
-		setRowExpandRatio(1, 1);
-		getComponent(0, 1).setHeight("100%");
-
-		setRowExpandRatio(3, 1);
-		getComponent(0, 3).setHeight("100%");
-
-		setRowExpandRatio(4, 14);
-		getComponent(1, 4).setHeight("100%");
-	}
-}
-
 // @VaadinComponent
 
 class Header extends Label {
@@ -178,8 +139,7 @@ class Header extends Label {
 
 	public Header(Person person) {
 		super(person.getFirstname() + " " + person.getLastname());
-
-		setStyleName("header");
+		
 	}
 }
 
@@ -200,8 +160,7 @@ class Foto extends MVerticalLayout {
 		foto.setType(1);
 		// setMimeType("image/png");
 		addComponent(foto);
-
-		setStyleName("header");
+		
 		setSizeFull();
 	}
 }
@@ -213,8 +172,7 @@ class AboutMeView extends MVerticalLayout {
 	private static final long serialVersionUID = 1L;
 
 	public AboutMeView(Person person) {
-		super();
-		setStyleName("inverse");
+		super();		
 
 		// Date of birth
 		Label birth = new Label();
@@ -271,8 +229,7 @@ class SkillView extends FormLayout {
 	private static final long serialVersionUID = 3L;
 
 	public SkillView(List<SkillGroup> skillGroups) {
-		this.setMargin(true);
-		setStyleName("inverse");
+		this.setMargin(true);		
 		this.setSizeFull();
 		for (SkillGroup group : skillGroups) {
 			Label skillGroup = new Label(group.getGroupName());
@@ -398,7 +355,6 @@ class Footer extends MHorizontalLayout {
 	public Footer() {
 		String realPath = VaadinService.getCurrent().getBaseDirectory().getAbsolutePath()+"/";
 		
-		this.setStyleName("footer");
 		this.setHeight("70px");
 		this.setWidth("100%");
 

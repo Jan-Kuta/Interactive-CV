@@ -3,6 +3,7 @@ $v-app-loading-text: "Please wait ...";
 $v-background-color: #f2dda4;
 $v-app-background-color: #f0e5d1;
 $v-selection-color: #946a4e;
+$normal-background-color: #ffffff;
 
 // Font Settings
 $v-font-color: #946a4e;
@@ -43,17 +44,26 @@ $v-tooltip-padding-vertical: 0px;
   	background-color: $v-background-color-inverse;
   }
   
+  .normal{
+  	color: $v-font-color;
+  	background-color: $normal-background-color;
+  }
+  
   .footer{
+    width: 100%;
   	color: $v-background-color-inverse;
   	background-color: $v-font-color-inverse;
   }
   
-  .header{
+  .header {
   	width: 100%;
   	background-color: $v-font-color;
-  	color:  $v-background-color-inverse;  	
-  	font-size: $v-font-size * 3;
+  	color:  $v-background-color-inverse;  	  	
+  }
+  
+  .header * {
   	text-align: center;
+  	font-size: $v-font-size * 3;  	
   }
   
  .about{
